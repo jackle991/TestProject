@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void changeTextViewValueRandomlyOnButtonClick() {
 
-        final String[] alphabet = {"a","b","c"};
+        final String[] alphabet = {"a","b","c","d","e","f","g"};
         final TextView changingText = (TextView) findViewById((R.id.text_to_change));
         Button changeTextButton = (Button) findViewById(R.id.change_text_button);
 
