@@ -4,24 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:padding="8dp">
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/text_to_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Press"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="436dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
-        android:layout_width="341dp"
-        android:layout_height="138dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Hopefully you don't see this when you run"
-        tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="81dp" />
+        android:text="@string/text_to_change"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/change_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_to_change"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FCMtest</string>
+    <string name="hopefully_you_don_t_see_this_when_you_run">Hopefully you don\'t see this when you run</string>
+    <string name="press">Press</string>
+    <string name ="text_to_change">These words will change if you click that button</string>
+    <string name ="change_text">Click to change text</string>
 </resources>
