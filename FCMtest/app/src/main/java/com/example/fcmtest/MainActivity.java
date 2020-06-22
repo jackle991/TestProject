@@ -15,7 +15,6 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    int oldValue;
     private EditText editTextNumber;
     private EditText editTextMessage;
 
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        changeTextViewValueRandomlyOnButtonClick();
+        changeTextView();
 
         //asking specific permissions
         ActivityCompat.requestPermissions(MainActivity.this, new String[] {
@@ -32,23 +31,20 @@ public class MainActivity extends AppCompatActivity {
 
         editTextMessage = findViewById(R.id.editTextTextMultiLine);
         editTextNumber = findViewById(R.id.editTextNumber);
+
     }
 
-    private void changeTextViewValueRandomlyOnButtonClick() {
-
-        final String[] alphabet = {"a","b","c","d","e","f","g"};
+    //once firebase messages are ready to send, add in parameter to function with the specific data
+    private void changeTextView() {
+        final String firebaseMsg = "Message from firebase";
         final TextView changingText = (TextView) findViewById((R.id.text_to_change));
-        Button changeTextButton = (Button) findViewById(R.id.change_text_button);
-
+        final Button changeTextButton = (Button) findViewById(R.id.change_text_button);
         changeTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int random = (int) (Math.random() * alphabet.length);
-                changingText.setText(alphabet[random]);
-                oldValue = random;
+                changingText.setText(firebaseMsg);
             }
         });
-        System.out.println(changingText.getText());
     }
 
     //onclick will show all the public methods in this file
