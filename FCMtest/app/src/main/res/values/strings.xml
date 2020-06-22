@@ -4,4 +4,7 @@
     <string name="press">Press</string>
     <string name ="text_to_change">These words will change if you click that button</string>
     <string name ="change_text">Click to change text</string>
+    <string name="send">Send</string>
+    <string name="enter_the_number">Enter the number</string>
+    <string name="type_your_message">Type your message</string>
 </resources>
