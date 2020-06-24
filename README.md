@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Firebase Android Snippets
 
 This repository holds code snippets used in Android documentation
@@ -12,3 +13,6 @@ We love contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 [gh-actions]: https://github.com/firebase/snippets-android/actions
 [gh-actions-badge]: https://github.com/firebase/snippets-android/workflows/Android%20CI/badge.svg
+=======
+# TestProject
+>>>>>>> 332ac296a00ae5e929a9da9a76bbf1c9fb4c98b8
