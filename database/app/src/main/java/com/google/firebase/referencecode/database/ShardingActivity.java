@@ -14,7 +14,7 @@ public class ShardingActivity extends AppCompatActivity {
                 .getReference();
 
         // Get a secondary database instance by URL
-        DatabaseReference secondary = FirebaseDatabase.getInstance("https://testapp-1234.firebaseio.com")
+        DatabaseReference secondary = FirebaseDatabase.getInstance("https://buttonclicker-b70e9.firebaseio.com/")
                 .getReference();
         // [END rtdb_multi_instance]
     }

@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.referencecode.database.models.Message;
+import com.google.firebase.referencecode.database.models.Ticket;
 
 /**
  * Activity to demonstrate basic data querying. To start this Activity, run:
@@ -47,151 +52,169 @@ public class QueryActivity extends AppCompatActivity {
     private ValueEventListener mMessagesListener;
     private ChildEventListener mMessagesQueryListener;
 
+    EditText customerNameText, ticketNumberText, ticketDetailText;
+    Button submitButton;
+    Ticket ticket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query);
-
+        customerNameText = (EditText)findViewById(R.id.editText1);
+        ticketNumberText = (EditText)findViewById(R.id.editText2);
+        ticketDetailText = (EditText)findViewById(R.id.editText3);
+        submitButton = (Button)findViewById(R.id.button2);
+        ticket = new Ticket();
         // Get a reference to the Firebase Database
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-    }
-
-    public String getUid() {
-        return "42";
-    }
-
-    public void basicListen() {
-        // [START basic_listen]
-        // Get a reference to Messages and attach a listener
-        mMessagesRef = databaseReference.child("messages");
-        mMessagesListener = new ValueEventListener() {
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("ticket");
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // New data at this path. This method will be called after every change in the
-                // data at this path or a subpath.
-
-                // Get the data as Message objects
-                Log.d(TAG, "Number of messages: " + dataSnapshot.getChildrenCount());
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    // Extract a Message object from the DataSnapshot
-                    Message message = child.getValue(Message.class);
-
-                    // Use the Message
-                    // [START_EXCLUDE]
-                    Log.d(TAG, "message text:" + message.getText());
-                    Log.d(TAG, "message sender name:" + message.getName());
-                    // [END_EXCLUDE]
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Could not successfully listen for data, log the error
-                Log.e(TAG, "messages:onCancelled:" + error.getMessage());
-            }
-        };
-        mMessagesRef.addValueEventListener(mMessagesListener);
-        // [END basic_listen]
-    }
-
-    public void basicQuery() {
-        // [START basic_query]
-        // My top posts by number of stars
-        String myUserId = getUid();
-        Query myTopPostsQuery = databaseReference.child("user-posts").child(myUserId)
-                .orderByChild("starCount");
-        myTopPostsQuery.addChildEventListener(new ChildEventListener() {
-            // TODO: implement the ChildEventListener methods as documented above
-            // [START_EXCLUDE]
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) { }
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
-            public void onChildRemoved(DataSnapshot dataSnapshot) { }
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
-            public void onCancelled(DatabaseError databaseError) { }
-            // [END_EXCLUDE]
-        });
-        // [END basic_query]
-    }
-
-    public void basicQueryValueListener() {
-        String myUserId = getUid();
-        Query myTopPostsQuery = databaseReference.child("user-posts").child(myUserId)
-                .orderByChild("starCount");
-
-        // [START basic_query_value_listener]
-        // My top posts by number of stars
-        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+            public void onClick(View view) {
+            ticket.setCustomerName(customerNameText.getText().toString().trim());
+            ticket.setTicketNumber(Long.parseLong(ticketNumberText.getText().toString().trim()));
+            ticket.setTicketDetail(ticketDetailText.getText().toString().trim());
+            databaseReference.push().setValue(ticket);
+            Toast.makeText(QueryActivity.this, "added success", Toast.LENGTH_LONG).show();
             }
         });
-        // [END basic_query_value_listener]
     }
 
-    public void cleanBasicListener() {
-        // Clean up value listener
-        // [START clean_basic_listen]
-        mMessagesRef.removeEventListener(mMessagesListener);
-        // [END clean_basic_listen]
-    }
-
-    public void cleanBasicQuery() {
-        // Clean up query listener
-        // [START clean_basic_query]
-        mMessagesQuery.removeEventListener(mMessagesQueryListener);
-        // [END clean_basic_query]
-    }
-
-    public void orderByNested() {
-        // [START rtdb_order_by_nested]
-        // Most viewed posts
-        Query myMostViewedPostsQuery = databaseReference.child("posts")
-                .orderByChild("metrics/views");
-        myMostViewedPostsQuery.addChildEventListener(new ChildEventListener() {
-            // TODO: implement the ChildEventListener methods as documented above
-            // [START_EXCLUDE]
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-            // [END_EXCLUDE]
-        });
-        // [END rtdb_order_by_nested]
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        basicListen();
-        basicQuery();
-        basicQueryValueListener();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        cleanBasicListener();
-        cleanBasicQuery();
-    }
+//    public String getUid() {
+//        return "42";
+//    }
+//
+//    public void basicListen() {
+//        // [START basic_listen]
+//        // Get a reference to Messages and attach a listener
+//        mMessagesRef = databaseReference.child("messages");
+//        mMessagesListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // New data at this path. This method will be called after every change in the
+//                // data at this path or a subpath.
+//
+//                // Get the data as Message objects
+//                Log.d(TAG, "Number of messages: " + dataSnapshot.getChildrenCount());
+//                for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                    // Extract a Message object from the DataSnapshot
+//                    Message message = child.getValue(Message.class);
+//
+//                    // Use the Message
+//                    // [START_EXCLUDE]
+//                    Log.d(TAG, "message text:" + message.getText());
+//                    Log.d(TAG, "message sender name:" + message.getName());
+//                    // [END_EXCLUDE]
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Could not successfully listen for data, log the error
+//                Log.e(TAG, "messages:onCancelled:" + error.getMessage());
+//            }
+//        };
+//        mMessagesRef.addValueEventListener(mMessagesListener);
+//        // [END basic_listen]
+//    }
+//
+//    public void basicQuery() {
+//        // [START basic_query]
+//        // My top posts by number of stars
+//        String myUserId = getUid();
+//        Query myTopPostsQuery = databaseReference.child("user-posts").child(myUserId)
+//                .orderByChild("starCount");
+//        myTopPostsQuery.addChildEventListener(new ChildEventListener() {
+//            // TODO: implement the ChildEventListener methods as documented above
+//            // [START_EXCLUDE]
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) { }
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+//            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+//            public void onCancelled(DatabaseError databaseError) { }
+//            // [END_EXCLUDE]
+//        });
+//        // [END basic_query]
+//    }
+//
+//    public void basicQueryValueListener() {
+//        String myUserId = getUid();
+//        Query myTopPostsQuery = databaseReference.child("user-posts").child(myUserId)
+//                .orderByChild("starCount");
+//
+//        // [START basic_query_value_listener]
+//        // My top posts by number of stars
+//        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+//                    // TODO: handle the post
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+//                // ...
+//            }
+//        });
+//        // [END basic_query_value_listener]
+//    }
+//
+//    public void cleanBasicListener() {
+//        // Clean up value listener
+//        // [START clean_basic_listen]
+//        mMessagesRef.removeEventListener(mMessagesListener);
+//        // [END clean_basic_listen]
+//    }
+//
+//    public void cleanBasicQuery() {
+//        // Clean up query listener
+//        // [START clean_basic_query]
+//        mMessagesQuery.removeEventListener(mMessagesQueryListener);
+//        // [END clean_basic_query]
+//    }
+//
+//    public void orderByNested() {
+//        // [START rtdb_order_by_nested]
+//        // Most viewed posts
+//        Query myMostViewedPostsQuery = databaseReference.child("posts")
+//                .orderByChild("metrics/views");
+//        myMostViewedPostsQuery.addChildEventListener(new ChildEventListener() {
+//            // TODO: implement the ChildEventListener methods as documented above
+//            // [START_EXCLUDE]
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {}
+//            // [END_EXCLUDE]
+//        });
+//        // [END rtdb_order_by_nested]
+//    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        basicListen();
+//        basicQuery();
+//        basicQueryValueListener();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        cleanBasicListener();
+//        cleanBasicQuery();
+//    }
 }
 

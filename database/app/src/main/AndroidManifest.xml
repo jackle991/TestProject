@@ -18,7 +18,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".kotlin.MainActivity" />
         <activity android:name=".OfflineActivity" />
-        <activity android:name=".ShardingActivity"></activity>
+        <activity android:name=".ShardingActivity" />
     </application>
 
 </manifest>

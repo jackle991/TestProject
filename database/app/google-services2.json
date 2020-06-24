@@ -71,43 +71,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:609239450174:android:26cd2b421c2ac78d28c76f",
-        "android_client_info": {
-          "package_name": "com.google.firebase.referencecode.database"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "609239450174-mbatshseut43hm5q0a2kog1ede1rbrun.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.google.firebase.referencecode.database",
-            "certificate_hash": "d70749be753ac8512049d06b498dfc9156aa2821"
-          }
-        },
-        {
-          "client_id": "609239450174-cdjjh96d580ucvrm247s9bhv317gs505.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBQ_-0zXO1Q3zIr2N4o1LUXgSPHl_IhaSw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "609239450174-cdjjh96d580ucvrm247s9bhv317gs505.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"
